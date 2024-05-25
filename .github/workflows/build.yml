@@ -24,6 +24,9 @@ jobs:
           
       - name: Install Build Tools and Platform Tools
         run: sdkmanager "build-tools;30.0.3" "platform-tools"
+        
+      - name: Verify AIDL Installation
+        run: $ANDROID_HOME/build-tools/30.0.3/aidl -h
 
       - name: Cache Buildozer global directory
         uses: actions/cache@v2
@@ -35,8 +38,7 @@ jobs:
         with:
           path: .buildozer
           key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
-      - name: Verify AIDL Installation
-        run: aidl -h
+
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
