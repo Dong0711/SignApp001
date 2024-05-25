@@ -16,6 +16,14 @@ jobs:
         run: |
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
         shell: bash
+        
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+        with:
+          sdk-version: '30'
+          
+      - name: Install Build Tools and Platform Tools
+        run: sdkmanager "build-tools;30.0.3" "platform-tools"
 
       - name: Cache Buildozer global directory
         uses: actions/cache@v2
@@ -27,7 +35,8 @@ jobs:
         with:
           path: .buildozer
           key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
-
+      - name: Verify AIDL Installation
+        run: aidl -h
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
